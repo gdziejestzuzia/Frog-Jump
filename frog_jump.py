@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import pygame, sys
 from pygame.locals import *
 import random
@@ -32,7 +34,10 @@ def make_text(text, font, color, surface, x, y):
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
 
+    click = False
+
 def menu():
+
     while True:
 
         screen.blit(background, (0,0))
@@ -48,7 +53,6 @@ def menu():
         button_2 = pygame.Rect(150, 290, 200, 50) #rules
         button_3 = pygame.Rect(150, 360, 200, 50) #author
         exit_button = pygame.Rect(350, 550, 100, 30) #exit
-        
         
            
         if button_1.collidepoint((mx, my)):
@@ -84,31 +88,31 @@ def menu():
  
         pygame.display.update()
 
+platforms = [Plat(random.randrange(0, width), random.randrange(0, height)) for i in range (15)]
+
 
 
 def game():
+
+    x = 100
+    y = 100
+    dy = 0.0
+    h = 200
     running = True
     while running:
-        screen.fill((0,128,0))
+        screen.fill((0,0,128))
         screen.blit(pla,(0,0))
-        platforms = [Plat(random.randrange(0, width), random.randrange(0, height)) for i in range(15)]
-        
-        x= 100
-        y=100
-        dy=0.0
-        h=200
         for platform in platforms:
             screen.blit(pla, (platform.x, platform.y))
-
+        
         dy += 0.2
         y += dy
         if y > height:
             dy = -10
 
-
         screen.blit(frog, (x,y))
         
-        make_text('game', font_small, (255, 255, 255), screen, 220, 20)
+        make_text('Frog jump!', font_big, (255, 255, 255), screen, 100, 20)
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
