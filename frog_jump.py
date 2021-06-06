@@ -20,9 +20,11 @@ class Plat:
 
 pygame.init()
 pygame.font.init()
+clock = pygame.time.Clock()
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_icon(logo)
 pygame.display.set_caption("Frog jump!")
+
 
 font_small = pygame.font.SysFont(None, 30)
 font_big = pygame.font.SysFont(None, 80)
@@ -34,10 +36,10 @@ def make_text(text, font, color, surface, x, y):
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
 
-    click = False
+    
 
 def menu():
-
+    click = False
     while True:
 
         screen.blit(background, (0,0))
@@ -100,6 +102,7 @@ def game():
     h = 200
     running = True
     while running:
+        clock.tick(90)
         screen.fill((0,0,128))
         screen.blit(pla,(0,0))
         for platform in platforms:
@@ -111,6 +114,16 @@ def game():
             dy = -10
 
         screen.blit(frog, (x,y))
+        if x > width:
+            x = 0
+        if x < 0:
+            x = width
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            x -= 4
+        if keys[pygame.K_RIGHT]:
+            x += 4
+
         
         make_text('Frog jump!', font_big, (255, 255, 255), screen, 100, 20)
         for event in pygame.event.get():
