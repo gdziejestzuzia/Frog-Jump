@@ -3,12 +3,15 @@
 import pygame, sys
 from pygame.locals import *
 import random
+import os
+
 
 
 logo = pygame.image.load("icons/pepe.png")
 pla = pygame.image.load("icons/simple_plat.png")
 frog = pygame.image.load("icons/frog.png")
-background = pygame.image.load("icons/background.jpg") #zmienić tło na jakieś lepsze
+background = pygame.image.load("icons/background.jpg")
+
 (width, height) = (500, 600)
 
 
@@ -20,6 +23,7 @@ class Plat:
 
 pygame.init()
 pygame.font.init()
+pygame.mixer.init()
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_icon(logo)
@@ -30,13 +34,23 @@ font_small = pygame.font.SysFont(None, 30)
 font_big = pygame.font.SysFont(None, 80)
 font_large = pygame.font.SysFont(None, 120)
 
+jump = pygame.mixer.Sound("sounds/jump.wav")
+frogsound = pygame.mixer.Sound("sounds/frogsound.mp3")
+gameover = pygame.mixer.Sound("sounds/game_over.wav")
+hurt = pygame.mixer.Sound("sounds/hurt.wav")
+
 def make_text(text, font, color, surface, x, y):
     textobj = font.render(text, 1, color)
     textrect = textobj.get_rect()
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
 
-    
+def highscore():
+    with open('./highscore.txt',"w") as f:
+        try:
+            high_score = int(f.read()) 
+        except: 
+            high_score = 0  
 
 def menu():
     click = False
@@ -59,15 +73,19 @@ def menu():
            
         if button_1.collidepoint((mx, my)):
             if click:
+                frogsound.play()
                 game()
         if button_2.collidepoint((mx, my)):
             if click:
+                frogsound.play()
                 game_rules()
         if button_3.collidepoint((mx, my)):
             if click:
+                frogsound.play()
                 author()
         if exit_button.collidepoint((mx, my)):
             if click:
+                frogsound.play()
                 end()
 
         pygame.draw.rect(screen, (0, 128, 0), button_1)
@@ -101,6 +119,7 @@ def game():
     dy = 0.0
     h = 200
     score = 0
+    life = 3
     running = True
     while running:
         clock.tick(90)
@@ -116,6 +135,7 @@ def game():
                 if platform.y > height:
                     platform.y = 0
                     platform.x = random.randrange(0, width)
+                    jump.play()
                     score +=1
         make_text('Score: ' + str(score), font_small, (255, 255, 255), screen, 390, 20)
 
@@ -123,9 +143,18 @@ def game():
 
         dy += 0.2
         y += dy
+
+        
         if y > height:
+            hurt.play()
+            life = life - 1
             dy = -10
 
+        if life == 0:
+            gameover.play()
+            game_over()
+
+        make_text('Lifes: ' + str(life), font_small, (255, 255, 255), screen, 390, 40)
         if x > width:
             x = 0
         if x < 0:
@@ -181,6 +210,24 @@ def game_rules():
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     running = False
+        
+        pygame.display.update()
+
+def game_over():
+    running = True
+    while running:
+        screen.fill((0,128,0))
+        #make_text('Your score: ' + str(score), font_small, (255, 255, 255), screen, 390, 20)
+        #make_text('Best score: ' + str(score), font_small, (255, 255, 255), screen, 390, 20)
+        make_text('game over', font_small, (0, 255, 0), screen, 20, 20)
+        make_text('Back to menu: press Esc', font_small, (0, 255, 0), screen, 20, 50)
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    menu()
         
         pygame.display.update()
 
