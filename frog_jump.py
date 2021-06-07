@@ -104,26 +104,41 @@ def game():
     while running:
         clock.tick(90)
         screen.fill((0,0,128))
-        screen.blit(pla,(0,0))
+
         for platform in platforms:
             screen.blit(pla, (platform.x, platform.y))
-        
+
+        if y < h:
+            y = h
+            for platform in platforms:
+                platform.y = platform.y - dy
+                if platform.y > height:
+                    platform.y = 0
+                    platform.x = random.randrange(0, width)
+
+
+
+        screen.blit(frog, (x,y))
+
         dy += 0.2
         y += dy
         if y > height:
             dy = -10
 
-        screen.blit(frog, (x,y))
         if x > width:
             x = 0
         if x < 0:
             x = width
+
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             x -= 4
         if keys[pygame.K_RIGHT]:
             x += 4
 
+        for plat in platforms: 
+            if (x + 50 >plat.x) and (x+20 < plat.x + 68) and (y +70 > plat.y) and (y +70 < plat.y + 14) and dy > 0:
+                dy = - 10
         
         make_text('Frog jump!', font_big, (255, 255, 255), screen, 100, 20)
         for event in pygame.event.get():
