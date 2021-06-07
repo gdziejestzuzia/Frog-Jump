@@ -100,6 +100,7 @@ def game():
     y = 100
     dy = 0.0
     h = 200
+    score = 0
     running = True
     while running:
         clock.tick(90)
@@ -115,8 +116,8 @@ def game():
                 if platform.y > height:
                     platform.y = 0
                     platform.x = random.randrange(0, width)
-
-
+                    score +=1
+        make_text('Score: ' + str(score), font_small, (255, 255, 255), screen, 390, 20)
 
         screen.blit(frog, (x,y))
 
