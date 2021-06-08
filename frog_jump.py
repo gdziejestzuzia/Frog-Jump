@@ -3,7 +3,7 @@
 import pygame, sys
 from pygame.locals import *
 import random
-import os
+
 
 
 
@@ -138,7 +138,8 @@ def game():
                     platform.x = random.randrange(0, width)
                     jump.play()
                     score +=1
-        make_text('Score: ' + str(score), font_small, (128,128,0), screen, 20, 25)
+        make_text('Score: ' + str(score), font_small, (128,128,0), screen, 10, 10)
+        make_text('Back to menu: press esc', font_small, (34,139,34), screen, 10, 570)
 
         screen.blit(frog, (x,y))
 
@@ -155,7 +156,7 @@ def game():
             gameover.play()
             game_over()
 
-        make_text('Lifes: ' + str(life), font_small, (255, 0, 0), screen, 20, 50)
+        make_text('Lifes: ' + str(life), font_small, (255, 0, 0), screen, 10, 30)
         if x > width:
             x = 0
         if x < 0:
@@ -186,7 +187,13 @@ def author():
     while running:
         screen.blit(background, (0,0))
         
-        make_text('about author', font_small, (144, 238, 144), screen, 200, 20)
+        make_text('About author', font_big, (34,139,34), screen, 70, 50)
+        make_text('Hello! My name is Zuzia and I am studying  ', font_small, (34,139,34), screen, 10, 200)
+        make_text('Applied Mathematics  at the Wrocław', font_small, (34,139,34), screen, 10, 230)
+        make_text('University of Technology. This game is my', font_small, (34,139,34), screen, 10, 260)
+        make_text('project for my programming course.', font_small, (34,139,34), screen, 10, 290)
+        make_text('I wish you a nice game.', font_small, (34,139,34), screen, 10, 320)
+        make_text('Back to menu: press esc', font_small, (34,139,34), screen, 10, 570)
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -201,7 +208,14 @@ def game_rules():
     running = True
     while running:
         screen.blit(background, (0,0))
-        make_text('game rules', font_small, (0, 255, 0), screen, 20, 20)
+        make_text('Game rules', font_big, (34,139,34), screen, 70, 50)
+        make_text('The rules are very simple. Press left / right', font_small, (34,139,34), screen, 10, 200)
+        make_text(' key to move and get as high as possible.', font_small, (34,139,34), screen, 10, 230)
+        make_text('The higher you jump, the more points you get.', font_small, (34,139,34), screen, 10, 260)
+        make_text('You have three lives, you will lose one ', font_small, (34,139,34), screen, 10, 290)
+        make_text('if you fall. That’s all, have fan!', font_small, (34,139,34), screen, 10, 320)
+        make_text('Back to menu: press esc', font_small, (34,139,34), screen, 10, 570)
+        
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -219,8 +233,9 @@ def game_over():
         screen.blit(go_background, (0,0))
         #make_text('Your score: ' + str(score), font_small, (255, 255, 255), screen, 390, 20)
         #make_text('Best score: ' + str(score), font_small, (255, 255, 255), screen, 390, 20)
-        make_text('Your score: ', font_small, (34,139,34), screen, 20, 20)
-        make_text('Back to menu: press Esc', font_small, (34,139,34), screen, 20, 50)
+        make_text('Your score: ', font_small, (34,139,34), screen, 150, 300)
+        make_text('play again: press space', font_small, (34,139,34), screen, 20, 10)
+        make_text('Back to menu: press esc', font_small, (34,139,34), screen, 10, 570)
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -228,6 +243,8 @@ def game_over():
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     menu()
+                if event.key == K_SPACE:
+                    game()
         
         pygame.display.update()
 
