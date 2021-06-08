@@ -1,4 +1,4 @@
-# Game Title
+# Frog Jump
 ## Author: Zuzanna Bilińska
 
 ### Short description
