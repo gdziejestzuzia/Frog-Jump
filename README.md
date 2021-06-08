@@ -6,7 +6,11 @@ jumping frog 🐸: Game inspired by doodle jump. Help the frog jump high into th
 
 ### Technologies
 **Python(3.7.9)** - this game is written in python
+
 **pygame(2.0.1)** - the library used to create this game
+
+
+![](icons/banan.jpg)
 
 ### How to run this app?
 1. Clone the template project: 

@@ -4,9 +4,6 @@ import pygame, sys
 from pygame.locals import *
 import random
 
-
-
-
 logo = pygame.image.load("icons/pepe.png")
 pla = pygame.image.load("icons/simple_plat.png")
 frog = pygame.image.load("icons/frog.png")
@@ -15,13 +12,30 @@ go_background = pygame.image.load("icons/go.png")
 
 (width, height) = (500, 600)
 
-
 class Plat:
+    """
+    class to represent platform
+    Attributes
+    ----------
+    x : float
+        first coordinate of the random position
+    y : folat
+        the second coordinate of the random position
+    """
     def __init__(self, x, y):
+        """
+        Constructs all the necessary attributes for the platform object
+         Parameters
+        ----------
+         x : float
+        first coordinate of the random position
+         y : folat
+        the second coordinate of the random position
+        """
         self.x = x
         self.y = y
 
-
+#main
 pygame.init()
 pygame.font.init()
 pygame.mixer.init()
@@ -30,23 +44,32 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.set_icon(logo)
 pygame.display.set_caption("Frog jump!")
 
-
+#text size
 font_small = pygame.font.SysFont(None, 30)
 font_big = pygame.font.SysFont(None, 80)
 font_large = pygame.font.SysFont(None, 100)
 
+#sounds
 jump = pygame.mixer.Sound("sounds/jump.wav")
 frogsound = pygame.mixer.Sound("sounds/frogsound.mp3")
 gameover = pygame.mixer.Sound("sounds/game_over.wav")
 hurt = pygame.mixer.Sound("sounds/hurt.wav")
 
 def make_text(text, font, color, surface, x, y):
+    """
+    function that creates text with a given font, color and position
+    
+    """
     textobj = font.render(text, 1, color)
     textrect = textobj.get_rect()
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
 
 def highscore():
+    """
+    
+    
+    """
     with open('./highscore.txt',"w") as f:
         try:
             high_score = int(f.read()) 
@@ -54,6 +77,13 @@ def highscore():
             high_score = 0  
 
 def menu():
+    """
+    
+    
+    
+    
+    
+    """
     click = False
     while True:
 
@@ -114,6 +144,12 @@ platforms = [Plat(random.randrange(0, width), random.randrange(0, height)) for i
 
 
 def game():
+    """
+    
+    
+    
+    
+    """
 
     x = 100
     y = 100
@@ -183,6 +219,13 @@ def game():
         pygame.display.update()
 
 def author():
+    """
+    
+    
+    
+    
+    
+    """
     running = True
     while running:
         screen.blit(background, (0,0))
@@ -205,12 +248,18 @@ def author():
         pygame.display.update()
  
 def game_rules():
+    """
+    
+    
+    
+    
+    """
     running = True
     while running:
         screen.blit(background, (0,0))
         make_text('Game rules', font_big, (34,139,34), screen, 70, 50)
         make_text('The rules are very simple. Press left / right', font_small, (34,139,34), screen, 10, 200)
-        make_text(' key to move and get as high as possible.', font_small, (34,139,34), screen, 10, 230)
+        make_text('keys to move and jump as high as possible.', font_small, (34,139,34), screen, 10, 230)
         make_text('The higher you jump, the more points you get.', font_small, (34,139,34), screen, 10, 260)
         make_text('You have three lives, you will lose one ', font_small, (34,139,34), screen, 10, 290)
         make_text('if you fall. That’s all, have fan!', font_small, (34,139,34), screen, 10, 320)
@@ -227,6 +276,11 @@ def game_rules():
         pygame.display.update()
 
 def game_over():
+    """
+    
+    
+    
+    """
     
     running = True
     while running:
@@ -249,6 +303,10 @@ def game_over():
         pygame.display.update()
 
 def end():
+    """
+    
+    
+    """
     pygame.quit()
     sys.exit()
 
