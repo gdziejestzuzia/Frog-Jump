@@ -301,7 +301,7 @@ def game_over():
         with open("highscore.txt", "r") as f:
             highscore_from_file = f.read()
 
-        if SCORE == int(highscore_from_file):
+        if SCORE > int(highscore_from_file):
             make_text('Best score: ' + str(SCORE), font_small, (255, 255, 255), screen, 150, 270)
 
         if SCORE < int(highscore_from_file):
