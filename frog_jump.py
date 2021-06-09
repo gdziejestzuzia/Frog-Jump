@@ -291,18 +291,27 @@ def game_rules():
 
 def game_over():
     """
-    the function displays the screen ending the game
+      the function displays the screen ending the game
     
     """
     
     running = True
     while running:
         screen.blit(go_background, (0,0))
-        #make_text('Your score: ' + str(score), font_small, (255, 255, 255), screen, 390, 20)
-        #make_text('Best score: ' + str(get_highscore(f.read())), font_small, (255, 255, 255), screen, 390, 20)
+        with open("highscore.txt", "r") as f:
+            highscore_from_file = f.read()
+
+        if SCORE == int(highscore_from_file):
+            make_text('Best score: ' + str(SCORE), font_small, (255, 255, 255), screen, 150, 270)
+
+        if SCORE < int(highscore_from_file):
+            make_text('Best score: ' + str(highscore_from_file), font_small, (255, 255, 255), screen, 150, 270)
+
+        
         make_text('Your score: ' + str(SCORE), font_small, (34,139,34), screen, 150, 300)
         make_text('play again: press space', font_small, (34,139,34), screen, 20, 10)
         make_text('Back to menu: press esc', font_small, (34,139,34), screen, 10, 570)
+        
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
