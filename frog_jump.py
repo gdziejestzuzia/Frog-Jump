@@ -35,6 +35,7 @@ class Plat:
         self.x = x
         self.y = y
 
+SCORE = 0
 #main
 pygame.init()
 pygame.font.init()
@@ -58,31 +59,45 @@ hurt = pygame.mixer.Sound("sounds/hurt.wav")
 def make_text(text, font, color, surface, x, y):
     """
     function that creates text with a given font, color and position
-    
+
+     @param text: (str) the text you want to display on the screen
+
+     @param font: the type and size of the font(large, big, small)
+
+     @param color: rgb text color
+
+     @param surface: the surface where the text will be displayed
+
+     @param x,y: (int): coordinates of the text position
+
     """
     textobj = font.render(text, 1, color)
     textrect = textobj.get_rect()
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
 
-def highscore():
+
+def get_highscore(score):
     """
-    
-    
+    the function reads the highest result or, if it has been beaten, changes its value
     """
-    with open('./highscore.txt',"w") as f:
-        try:
-            high_score = int(f.read()) 
-        except: 
-            high_score = 0  
+    new_score = score
+    with open("highscore.txt", "r") as f:
+        stored_val = f.read()
+        high_score = int(stored_val) if stored_val else 0
+
+    with open("highscore.txt", "w") as f:
+        if new_score > int(high_score):
+            f.write(str(new_score))
+            return new_score
+        else:
+            return high_score
+
+
 
 def menu():
     """
-    
-    
-    
-    
-    
+    the main page of the game with all the buttons you need
     """
     click = False
     while True:
@@ -95,7 +110,7 @@ def menu():
         make_text('author', font_small, (34,139,34), screen, 40, 415)
         make_text('exit', font_small, (34,139,34), screen, 375, 525)
         mx, my = pygame.mouse.get_pos()
- 
+        
         button_1 = pygame.Rect(150, 260, 200, 50) #game 
         button_2 = pygame.Rect(150, 330, 200, 50) #rules
         button_3 = pygame.Rect(150, 400, 200, 50) #author
@@ -145,17 +160,14 @@ platforms = [Plat(random.randrange(0, width), random.randrange(0, height)) for i
 
 def game():
     """
-    
-    
-    
+the whole mechanism of the game
     
     """
-
     x = 100
     y = 100
     dy = 0.0
     h = 200
-    score = 0
+    
     life = 3
     running = True
     while running:
@@ -165,6 +177,7 @@ def game():
         for platform in platforms:
             screen.blit(pla, (platform.x, platform.y))
 
+        #getting score
         if y < h:
             y = h
             for platform in platforms:
@@ -173,16 +186,19 @@ def game():
                     platform.y = 0
                     platform.x = random.randrange(0, width)
                     jump.play()
-                    score +=1
-        make_text('Score: ' + str(score), font_small, (128,128,0), screen, 10, 10)
+                    global SCORE
+                    SCORE +=1
+                    get_highscore(SCORE)
+        make_text('Score: ' + str(SCORE), font_small, (128,128,0), screen, 10, 10)
         make_text('Back to menu: press esc', font_small, (34,139,34), screen, 10, 570)
-
+        
+        
+        #frog
         screen.blit(frog, (x,y))
-
         dy += 0.2
         y += dy
 
-        
+        #lose life
         if y > height:
             hurt.play()
             life = life - 1
@@ -197,17 +213,18 @@ def game():
             x = 0
         if x < 0:
             x = width
-
+        #right/left move
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             x -= 4
         if keys[pygame.K_RIGHT]:
             x += 4
 
+        #jump
         for plat in platforms: 
             if (x + 50 >plat.x) and (x+20 < plat.x + 68) and (y +70 > plat.y) and (y +70 < plat.y + 14) and dy > 0:
                 dy = - 10
-        
+        #exit
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -220,10 +237,7 @@ def game():
 
 def author():
     """
-    
-    
-    
-    
+    a short text about the author
     
     """
     running = True
@@ -237,6 +251,8 @@ def author():
         make_text('project for my programming course.', font_small, (34,139,34), screen, 10, 290)
         make_text('I wish you a nice game.', font_small, (34,139,34), screen, 10, 320)
         make_text('Back to menu: press esc', font_small, (34,139,34), screen, 10, 570)
+
+        #exit
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -249,9 +265,7 @@ def author():
  
 def game_rules():
     """
-    
-    
-    
+    short game rules
     
     """
     running = True
@@ -277,8 +291,7 @@ def game_rules():
 
 def game_over():
     """
-    
-    
+    the function displays the screen ending the game
     
     """
     
@@ -286,8 +299,8 @@ def game_over():
     while running:
         screen.blit(go_background, (0,0))
         #make_text('Your score: ' + str(score), font_small, (255, 255, 255), screen, 390, 20)
-        #make_text('Best score: ' + str(score), font_small, (255, 255, 255), screen, 390, 20)
-        make_text('Your score: ', font_small, (34,139,34), screen, 150, 300)
+        #make_text('Best score: ' + str(get_highscore(f.read())), font_small, (255, 255, 255), screen, 390, 20)
+        make_text('Your score: ' + str(SCORE), font_small, (34,139,34), screen, 150, 300)
         make_text('play again: press space', font_small, (34,139,34), screen, 20, 10)
         make_text('Back to menu: press esc', font_small, (34,139,34), screen, 10, 570)
         for event in pygame.event.get():
@@ -304,7 +317,7 @@ def game_over():
 
 def end():
     """
-    
+    the function closes the program
     
     """
     pygame.quit()
